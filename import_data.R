@@ -4,52 +4,122 @@ library(aws.s3) # requêtes s3
 library(arrow) # lecture fichiers parquet
 library(httr) # barre de progression téléchargement
 
-# Récupérer l'endpoint S3 
+
+################################################################################
+
+# Récupérer l'endpoint S3 (si nécessaire)
 # Sys.setenv(AWS_S3_ENDPOINT = "minio.lab.sspcloud.fr") # Créer la variable d'environnemnt si elle n'est pas déjà définie
 endpoint <- paste0("https://", Sys.getenv("AWS_S3_ENDPOINT")) # inutile si l'on ne souhaite pas charger les données dans un bucket s3)
 
-# Spécifiez le chemin où sont stockées les données (s3 ou url internet) et le chemin local (où l'on va mettre les données)
-local_path <- "data_census_individuals.parquet"
+################################################################################
 
-s3_path <- "s3://oliviermeslin/rp/data_census_individuals.parquet"
-url = 'https://www.data.gouv.fr/fr/datasets/r/c8e1b241-75fe-43e9-a266-830fc30ec61d'
-
-
-
-
-
-# Télécharger le fichier 
-  # Sepuis S3 vers un fichier local
-  save_object(object = s3_path, file = local_path, bucket = "oliviermeslin", opts = list(endpoint = Sys.getenv("AWS_S3_ENDPOINT")))
-
-  # alternative: depuis une adresse url
-  download.file(url, destfile = local_path, mode = "wb")
+# Fonction de téléchargement des données depuis S3 ou une URL avec barre de progression
+download_data <- function(local_path, url = NULL, s3_path = NULL, bucket = NULL, endpoint = NULL) {
   
   # Vérifier si les données sont déjà présentes en local
   if (file.exists(local_path)) {
     cat("Les données sont déjà téléchargées dans votre espace local.\n")
-  } else {
-    # Télécharger les données avec une barre de progression si elles ne sont pas présentes
+    return(invisible(NULL))  # Sortir de la fonction si les données sont déjà présentes
+  }
+  
+  # Télécharger les données depuis S3
+  if (!is.null(s3_path) && !is.null(bucket) && !is.null(endpoint)) {
+    cat("Téléchargement depuis le bucket S3...\n")
+
+    # Télécharger depuis S3 avec tryCatch pour gérer les erreurs
+    success <- tryCatch({
+      save_object(object = s3_path, 
+                  file = local_path, 
+                  bucket = bucket, 
+                  opts = list(endpoint = Sys.getenv("AWS_S3_ENDPOINT")))
+      TRUE
+    }, error = function(e) {
+      cat("Le téléchargement depuis S3 a échoué:", e$message, "\n")
+      FALSE
+    })
+    
+    if (success) {
+      cat("Téléchargement effectué avec succès depuis S3.\n")
+    } else {
+      return(invisible(NULL))
+    }
+    
+    # Télécharger les données depuis une URL
+  } else if (!is.null(url)) {
+    cat("Téléchargement depuis l'URL...\n")
+    
+    # Télécharger depuis l'URL avec une barre de progression
     response <- GET(url, write_disk(local_path, overwrite = TRUE), progress())
     
     # Vérifier si le téléchargement a réussi
     if (status_code(response) == 200) {
-      cat("Téléchargement effectué avec succès.\n")
-      
-      # Lire les données Parquet téléchargées
-      data_census_individuals <- read_parquet(local_path)
-      
-      # Afficher un aperçu des données
-      print(head(data_census_individuals))
+      cat("Téléchargement effectué avec succès depuis l'URL.\n")
     } else {
       cat("Le téléchargement a échoué avec le code de statut:", status_code(response), "\n")
+      return(invisible(NULL))
     }
+  } else {
+    cat("Ni URL, ni chemin S3 spécifié. Impossible de télécharger les données.\n")
+    return(invisible(NULL))
   }
   
+  # Retourner un message de succès après téléchargement
+  if (file.exists(local_path)) {
+    cat("Fichier téléchargé et enregistré à :", local_path, "\n")
+  }
   
-# Charger les données localement avec Arrow
-data_census_individuals <- arrow::read_parquet(local_path)
+  return(invisible(NULL))  # Retourner NULL si le fichier est déjà là ou si une erreur survient
+}
+
+
+# Fonction pour lire les fichiers Parquet avec Arrow (après téléchargement)
+read_parquet_data <- function(local_path) {
+  if (file.exists(local_path)) {
+    data <- arrow::read_parquet(local_path)
+    cat("Données Parquet chargées avec succès depuis :", local_path, "\n")
+    return(data)
+  } else {
+    cat("Le fichier n'existe pas à l'emplacement spécifié :", local_path, "\n")
+    return(NULL)
+  }
+}
+
+################################################################################
+
+# Téléchargement des fichiers en local
+
+  # Depuis un bucket S3
+  download_data(local_path = "data_census_individuals.parquet", 
+                s3_path = "rp/data_census_individuals.parquet", 
+                bucket = "oliviermeslin", 
+                endpoint = "https://minio.lab.sspcloud.fr")
+  
+  download_data(local_path = "data_census_dwellings.parquet", 
+                s3_path = "rp/data_census_dwellings.parquet", 
+                bucket = "oliviermeslin", 
+                endpoint = "https://minio.lab.sspcloud.fr")
+  
+  # Depuis une adresse URL
+  download_data(local_path = "data_census_individuals.parquet", 
+                url = "https://www.data.gouv.fr/fr/datasets/r/c8e1b241-75fe-43e9-a266-830fc30ec61d")
+  
+  download_data(local_path = "data_census_dwellings.parquet", 
+                url = "https://www.data.gouv.fr/fr/datasets/r/f314175a-6d33-4ee4-b5eb-2cb6c29df2c2")
+
+  
+# Lecture des fichiers Parquet avec Arrow (après téléchargement)
+data_census_individuals <- read_parquet_data(local_path = "data_census_individuals.parquet")
+data_census_dwellings <- read_parquet_data(local_path = "data_census_dwellings.parquet")
+
 
 # Afficher un aperçu des données
 print(head(data_census_individuals))
+print(head(data_census_dwellings))
+
+# Vérification des fichiers présents en local
+list.files("chemin/vers/repertoire")
+
+# Suppression de certains fichiers en local
+file.remove(c("data_census_individuals.parquet", "data_census_dwellings.parquet"))
+
 
