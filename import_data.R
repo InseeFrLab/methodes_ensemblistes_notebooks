@@ -84,6 +84,19 @@ read_parquet_data <- function(local_path) {
   }
 }
 
+
+# Fonction pour lire les fichiers CSV avec un délimiteur ';'
+read_csv_data <- function(local_path) {
+  if (file.exists(local_path)) {
+    data <- read.csv(local_path, sep = ";")
+    cat("Données CSV chargées avec succès depuis :", local_path, "\n")
+    return(data)
+  } else {
+    cat("Le fichier n'existe pas à l'emplacement spécifié :", local_path, "\n")
+    return(NULL)
+  }
+}
+
 ################################################################################
 
 # Téléchargement des fichiers en local
@@ -100,16 +113,25 @@ read_parquet_data <- function(local_path) {
                 endpoint = "https://minio.lab.sspcloud.fr")
   
   # Depuis une adresse URL
-  download_data(local_path = "data_census_individuals.parquet", 
+  download_data(local_path = "data/data_census_individuals.parquet", 
                 url = "https://www.data.gouv.fr/fr/datasets/r/c8e1b241-75fe-43e9-a266-830fc30ec61d")
   
-  download_data(local_path = "data_census_dwellings.parquet", 
+  download_data(local_path = "data/data_census_dwellings.parquet", 
                 url = "https://www.data.gouv.fr/fr/datasets/r/f314175a-6d33-4ee4-b5eb-2cb6c29df2c2")
-
+  
+  download_data(local_path = "documentation/doc_census_individuals.csv", 
+                url = "https://www.data.gouv.fr/fr/datasets/r/1c6c6ab2-b766-41a4-90f0-043173d5e9d1")
+  
+  download_data(local_path = "documentation/doc_census_dwellings.csv", 
+                url = "https://www.data.gouv.fr/fr/datasets/r/c274705f-98db-4d9b-9674-578e04f03198")
+  
   
 # Lecture des fichiers Parquet avec Arrow (après téléchargement)
-data_census_individuals <- read_parquet_data(local_path = "data_census_individuals.parquet")
-data_census_dwellings <- read_parquet_data(local_path = "data_census_dwellings.parquet")
+data_census_individuals <- read_parquet_data(local_path = "documentation/doc_census_individuals.parquet")
+data_census_dwellings <- read_parquet_data(local_path = "documentation/doc_census_dwellings.parquet")
+
+doc_census_individuals <- read_csv_data(local_path = "documentation/doc_census_individuals.csv")
+doc_census_dwellings <- read_csv_data(local_path = "documentation/doc_census_dwellings.csv")
 
 
 # Afficher un aperçu des données
