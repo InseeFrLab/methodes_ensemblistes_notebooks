@@ -6,3 +6,4 @@
 .parquet
 data/
 documentation/
+renv/library

@@ -127,8 +127,8 @@ read_csv_data <- function(local_path) {
   
   
 # Lecture des fichiers Parquet avec Arrow (après téléchargement)
-data_census_individuals <- read_parquet_data(local_path = "documentation/doc_census_individuals.parquet")
-data_census_dwellings <- read_parquet_data(local_path = "documentation/doc_census_dwellings.parquet")
+data_census_individuals <- read_parquet_data(local_path = "data/data_census_individuals.parquet")
+data_census_dwellings <- read_parquet_data(local_path = "data/data_census_dwellings.parquet")
 
 doc_census_individuals <- read_csv_data(local_path = "documentation/doc_census_individuals.csv")
 doc_census_dwellings <- read_csv_data(local_path = "documentation/doc_census_dwellings.csv")
