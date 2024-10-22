@@ -49,13 +49,13 @@ download_data <- function(local_path, url = NULL, s3_path = NULL, bucket = NULL,
     cat("Téléchargement depuis l'URL...\n")
     
     # Télécharger depuis l'URL avec une barre de progression
-    response <- GET(url, write_disk(local_path, overwrite = TRUE), progress())
+    response <- GET(url, write_disk(local_path, overwrite = TRUE), httr::progress())
     
     # Vérifier si le téléchargement a réussi
     if (status_code(response) == 200) {
       cat("Téléchargement effectué avec succès depuis l'URL.\n")
     } else {
-      cat("Le téléchargement a échoué avec le code de statut:", status_code(response), "\n")
+      cat("Le téléchargement a échoué avec le code de statut:", httr::status_code(response), "\n")
       return(invisible(NULL))
     }
   } else {
@@ -102,12 +102,12 @@ read_csv_data <- function(local_path) {
 # Téléchargement des fichiers en local
 
   # Depuis un bucket S3
-  download_data(local_path = "data_census_individuals.parquet", 
+  download_data(local_path = "data/data_census_individuals.parquet", 
                 s3_path = "rp/data_census_individuals.parquet", 
                 bucket = "oliviermeslin", 
                 endpoint = "https://minio.lab.sspcloud.fr")
   
-  download_data(local_path = "data_census_dwellings.parquet", 
+  download_data(local_path = "data/data_census_dwellings.parquet", 
                 s3_path = "rp/data_census_dwellings.parquet", 
                 bucket = "oliviermeslin", 
                 endpoint = "https://minio.lab.sspcloud.fr")
