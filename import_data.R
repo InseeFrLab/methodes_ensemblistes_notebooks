@@ -138,10 +138,4 @@ doc_census_dwellings <- read_csv_data(local_path = "documentation/doc_census_dwe
 print(head(data_census_individuals))
 print(head(data_census_dwellings))
 
-# Vérification des fichiers présents en local
-list.files("chemin/vers/repertoire")
-
-# Suppression de certains fichiers en local
-file.remove(c("data_census_individuals.parquet", "data_census_dwellings.parquet"))
-
 

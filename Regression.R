@@ -14,14 +14,19 @@ library(caret)  # Pour la validation croisée et la gestion des données
 library(readr)
 library(arrow)
 
+
 # Charger les données
 data_census_individuals <- read_parquet("data/data_census_individuals.parquet")
 
 # Exploration des données
 str(data_census_individuals)  # Voir la structure des données pour comprendre les types de variables
 
+# Sélection aléatoire de 1/20è des données
+set.seed(123)  # Pour la reproductibilité
+data_sample <- data_census_individuals %>% sample_frac(1/20)
+
 # Suppression des variables liées à l'âge (AGER20, AGEREV, AGEREVQ, ANAI)
-data_clean <- data_census_individuals %>%
+data_clean <- data_sample %>%
   select(-AGER20, -AGEREV, -AGEREVQ, -ANAI)
 
 # Encodage des variables catégorielles
@@ -44,6 +49,8 @@ y_test  <- y[-trainIndex]
 
 # Modèle Random Forest avec le package ranger
 set.seed(123)  # Pour la reproductibilité
+start_time <- Sys.time() # Démarrer le compteur de temps
+
 rf_model <- ranger(
   formula = y_train ~ .,
   data = X_train,
@@ -53,6 +60,10 @@ rf_model <- ranger(
   min.node.size = 5,  # Taille minimale des nœuds
   seed = 123
 )
+
+end_time <- Sys.time()
+elapsed_time <- end_time - start_time # Calculer le temps écoulé
+cat("Temps d'exécution du modèle Random Forest :", elapsed_time, "\n") # Afficher le temps écoulé
 
 # Prédictions sur les données de test
 y_pred <- predict(rf_model, data = X_test)$predictions
