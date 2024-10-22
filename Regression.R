@@ -22,7 +22,7 @@ data_census_individuals <- read_parquet("data/data_census_individuals.parquet")
 # Exploration des données
 str(data_census_individuals)  # Voir la structure des données pour comprendre les types de variables
 
-# Sélection aléatoire de 1/20è des données
+# Sélection aléatoire au 1/200è des données
 set.seed(123)  # Pour la reproductibilité
 data_sample <- data_census_individuals %>% sample_frac(1/200)
 
@@ -30,7 +30,7 @@ data_sample <- data_census_individuals %>% sample_frac(1/200)
 data_clean <- data_sample %>%
   select(-AGER20, -AGEREV, -AGEREVQ, -ANAI,
          -TRIRIS, -IRIS, -DNAI, -DEPT, -ARM,
-         -CANTVILLE, -NUMMI) # on supprime les variables avec trop de modalités pour commencer
+         -CANTVILLE, -NUMMI, -IPONDI) # on supprime les variables avec trop de modalités pour commencer
   
 
 # Encodage des variables catégorielles

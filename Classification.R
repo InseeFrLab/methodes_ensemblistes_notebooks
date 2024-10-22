@@ -21,16 +21,19 @@ data_census_individuals <- read_parquet("data/data_census_individuals.parquet")
 # Exploration des données
 str(data_census_individuals)  # Voir la structure des données pour comprendre les types de variables
 
-# Sélection aléatoire de 1/20è des données
+# Sélection aléatoire au 1/100è des données
 set.seed(123)  # Pour la reproductibilité
-data_sample <- data_census_individuals %>% sample_frac(1/200)
+data_sample <- data_census_individuals %>% sample_frac(1/100)
 
 # Suppression des variables liées à l'âge (AGER20, AGEREV, AGEREVQ, ANAI)
 data_clean <- data_sample %>%
   select(-AGER20, -AGEREV, -AGEREVQ, -ANAI,
          -TRIRIS, -IRIS, -DNAI, -DEPT, -ARM,
-         -CANTVILLE, -NUMMI) # on supprime les variables avec trop de modalités pour commencer
+         -CANTVILLE, -NUMMI, -IPONDI) # on supprime les variables avec trop de modalités pour commencer
 
+# Voir la répartition des classes de diplôme
+sum(is.na(data_clean$DIPL))
+table(data_clean$DIPL)
 
 # Encodage des variables catégorielles
 str(data_clean)
@@ -75,12 +78,14 @@ predictions <- predict(rf_model, data = X_test)
 # Prédictions des classes
 y_pred_class <- predictions$predictions %>% apply(1, which.max) %>% as.factor()
 
+# Harmoniser les niveaux entre y_test et y_pred_class
+y_pred_class <- factor(y_pred_class, levels = levels(y_test)) # Cas où les données d'entrainement ne contenaient pas tous les niveaux possibles par exemple
+
 # Évaluer la performance avec la matrice de confusion
 conf_matrix <- confusionMatrix(y_pred_class, y_test)
 print(conf_matrix)
 
 # Visualiser la matrice de confusion avec ggplot2
-library(caret)
 cm_df <- as.data.frame(conf_matrix$table)
 ggplot(cm_df, aes(x = Reference, y = Prediction, fill = Freq)) +
   geom_tile() +
@@ -97,7 +102,7 @@ importance_df <- data.frame(
   Importance = rf_model$variable.importance
 )
 
-# Affichage des 10 variables les plus importantes
+# Affichage des xx variables les plus importantes (10 variables les plus importantes par défaut)
 plot_top_n_variables <- function(importance_df, n = 10) {
   # Trier par importance
   importance_df_sorted <- importance_df %>%
@@ -119,6 +124,7 @@ plot_top_n_variables <- function(importance_df, n = 10) {
 
 # Afficher les 10 variables les plus importantes
 plot_top_n_variables(importance_df, 10)
+
 
 # Validation croisée
 cv_control <- trainControl(method = "cv", number = 10)
