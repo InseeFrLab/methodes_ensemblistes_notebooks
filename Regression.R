@@ -23,13 +23,18 @@ str(data_census_individuals)  # Voir la structure des données pour comprendre l
 
 # Sélection aléatoire de 1/20è des données
 set.seed(123)  # Pour la reproductibilité
-data_sample <- data_census_individuals %>% sample_frac(1/20)
+data_sample <- data_census_individuals %>% sample_frac(1/25)
 
 # Suppression des variables liées à l'âge (AGER20, AGEREV, AGEREVQ, ANAI)
 data_clean <- data_sample %>%
-  select(-AGER20, -AGEREV, -AGEREVQ, -ANAI)
+  select(-AGER20, -AGEREV, -AGEREVQ, -ANAI,
+         -TRIRIS, -IRIS, -DNAI, -DEPT, -ARM,
+         -CANTVILLE, -NUMMI) # on supprime les variables avec trop de modalités pour commencer
+  
 
 # Encodage des variables catégorielles
+str(data_clean)
+
 data_clean <- data_clean %>%
   mutate_if(is.character, as.factor)
 
