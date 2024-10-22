@@ -13,6 +13,7 @@ library(plyr)
 library(caret)  # Pour la validation croisée et la gestion des données
 library(readr)
 library(arrow)
+library(ggplot2)
 
 
 # Charger les données
@@ -23,7 +24,7 @@ str(data_census_individuals)  # Voir la structure des données pour comprendre l
 
 # Sélection aléatoire de 1/20è des données
 set.seed(123)  # Pour la reproductibilité
-data_sample <- data_census_individuals %>% sample_frac(1/25)
+data_sample <- data_census_individuals %>% sample_frac(1/200)
 
 # Suppression des variables liées à l'âge (AGER20, AGEREV, AGEREVQ, ANAI)
 data_clean <- data_sample %>%
@@ -77,6 +78,20 @@ y_pred <- predict(rf_model, data = X_test)$predictions
 rmse <- sqrt(mean((y_test - y_pred)^2))
 print(paste("RMSE: ", rmse))
 
+# Évaluer la performance : graphique de dispersion
+results <- data.frame(
+  Age_Real = y_test,          # Âge réel
+  Age_Predicted = y_pred      # Âge prédit par la Random Forest
+)
+
+ggplot(results, aes(x = Age_Real, y = Age_Predicted)) +
+  geom_point(color = 'blue', alpha = 0.5) +  # Points de dispersion
+  geom_abline(intercept = 0, slope = 1, color = 'red', linetype = "dashed") +  # Ligne y = x (référence)
+  labs(title = "Âge prédit vs Âge réel",
+       x = "Âge réel",
+       y = "Âge prédit") +
+  theme_minimal()
+
 # Validation croisée
 cv_control <- trainControl(method = "cv", number = 10)
 rf_cv_model <- train(
@@ -87,15 +102,68 @@ rf_cv_model <- train(
   importance = "impurity"
 )
 
-# Importance des variables (Mean Decrease in Impurity et Mean Decrease Accuracy)
-importance <- importance(rf_model)
-importance_sorted <- importance[order(importance, decreasing = TRUE)]
-print(importance_sorted)
+# Importance des variables (Mean Decrease in Impurity)
 
-# Graphique d'importance des variables
-varImpPlot(rf_model)
+  # Extraire l'importance des variables depuis le modèle ranger
+  importance_df <- data.frame(
+    Variable = names(rf_model$variable.importance),
+    Importance = rf_model$variable.importance
+  )
+  
+  # Associer les libellés (descriptions) des variables depuis le dictionnaire
+  doc_census_individuals_noms_variables <- doc_census_individuals %>%
+    select(COD_VAR, LIB_VAR)
+  doc_census_individuals_noms_variables <- doc_census_individuals_noms_variables %>%
+    distinct()
+  
+  importance_df_with_labels <- importance_df %>%
+    left_join(doc_census_individuals_noms_variables, by = c("Variable" = "COD_VAR"))
+  
+  # Trier les variables par importance décroissante
+  importance_df_sorted <- importance_df_with_labels %>%
+    arrange(desc(Importance))
+  
+  # Graphique d'importance des variables
+  ggplot(importance_df_with_labels, aes(x = reorder(LIB_VAR, Importance), y = Importance)) +
+    geom_bar(stat = "identity", fill = "steelblue") +
+    coord_flip() +  # Inverser les axes pour faciliter la lecture
+    labs(title = "Importance des variables (Mean Decrease in Impurity)",
+         x = "Variable",
+         y = "Importance") +
+    theme_minimal()
+
+  # Afficher le top XX des variables les plus importantes avec leurs descriptions
+    plot_top_n_variables <- function(importance_df_with_labels, n = 10) {
+        
+      # Sélectionner les n variables les plus importantes
+      importance_df_sorted <- importance_df_with_labels %>%
+        arrange(desc(Importance))
+      
+        top_n_variables <- importance_df_sorted %>%
+          head(n)
+        
+      # Afficher les n variables les plus importantes
+      print(top_n_variables)
+      
+      # Visualiser graphiquement les n variables les plus importantes
+      ggplot(top_n_variables, aes(x = reorder(LIB_VAR, Importance), y = Importance)) +
+        geom_bar(stat = "identity", fill = "steelblue") +
+        coord_flip() +  # Inverser les axes pour faciliter la lecture
+        labs(title = paste("Top", n, "variables les plus importantes (Mean Decrease in Impurity)"),
+             x = "Variable",
+             y = "Importance") +
+        theme_minimal()
+    }
+    
+      plot_top_n_variables(importance_df_with_labels, n = 10)
+      plot_top_n_variables(importance_df_with_labels, n = 20)
+      
+  
 
 # Importance des variables basée sur la précision (Mean Decrease Accuracy)
 importance_accuracy <- rf_cv_model$finalModel$variable.importance
 print(importance_accuracy)
 
+
+  
+  
