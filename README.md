@@ -7,7 +7,7 @@ Ce notebook accompagne le document méthodologique de l'Insee "Les méthodes ens
 Ce projet utilise `renv` pour gérer les dépendances.
 
 ## Structure du Projet
-Voici la structure principale du projet et une description de chaque dossier et fichier :
+Voici la structure principale du projet :
 
 - methodes_ensemblistes_notebooks/
 
@@ -29,7 +29,7 @@ Voici la structure principale du projet et une description de chaque dossier et 
                              # Défini une variable d'environnement pour l'endpoint S3
                              
                              
-                             
+# Description détaillée des dossiers et fichiers                           
                              
                              
                              
