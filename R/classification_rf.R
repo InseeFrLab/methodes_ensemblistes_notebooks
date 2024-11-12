@@ -1,19 +1,6 @@
 # Premier exemple de classification: prédire le niveau de diplôme
 
-#install.packages("renv")
-#renv::init() #  initialise renv dans le projet (crée un fichier renv.lock et un dossier renv/ où les packages spécifiques à ce projet seront installés)
-#renv::snapshot() # inspecte le projet pour capturer tous les packages nécessaires et les versions dans renv.lock.
-#renv::restore() # lit le fichier renv.lock et installe les packages spécifiés à leurs versions respectives dans l'environnement isolé.
-
-# Charger des packages nécessaires
-library(tidyverse) # Pour la manipulation des données
-library(Rcpp)
-library(ranger) # Pour la Random Forest
-library(plyr)
-library(caret)  # Pour la validation croisée et la gestion des données
-library(readr)
-library(arrow)
-library(ggplot2)
+################################################################################
 
 # Charger les données
 data_census_individuals <- read_parquet("data/data_census_individuals.parquet")

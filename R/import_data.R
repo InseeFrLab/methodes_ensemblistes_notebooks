@@ -1,20 +1,15 @@
 # Import data
 
-library(aws.s3) # requêtes s3
-library(arrow) # lecture fichiers parquet
-library(httr) # barre de progression téléchargement
-
-
-################################################################################
-
-# Récupérer l'endpoint S3 (si nécessaire)
-# Sys.setenv(AWS_S3_ENDPOINT = "minio.lab.sspcloud.fr") # Créer la variable d'environnemnt si elle n'est pas déjà définie
-endpoint <- paste0("https://", Sys.getenv("AWS_S3_ENDPOINT")) # inutile si l'on ne souhaite pas charger les données dans un bucket s3)
-
 ################################################################################
 
 # Fonction de téléchargement des données depuis S3 ou une URL avec barre de progression
 download_data <- function(local_path, url = NULL, s3_path = NULL, bucket = NULL, endpoint = NULL) {
+  
+  # Vérifier si le dossier du chemin local existe, sinon le créer
+  dir_path <- dirname(local_path)
+  if (!dir.exists(dir_path)) {
+    dir.create(dir_path, recursive = TRUE)
+  }
   
   # Vérifier si les données sont déjà présentes en local
   if (file.exists(local_path)) {
