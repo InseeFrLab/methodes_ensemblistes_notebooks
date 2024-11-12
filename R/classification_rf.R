@@ -32,6 +32,9 @@ data_clean <- data_sample %>%
 sum(is.na(data_clean$DIPL))
 table(data_clean$DIPL)
 
+table(data_clean$DIPL, data_clean$CS1)
+
+
 # Encodage des variables catégorielles
 str(data_clean)
 
@@ -124,18 +127,18 @@ plot_top_n_variables(importance_df, 10)
 
 
 # Validation croisée
-cv_control <- trainControl(method = "cv", number = 10)
-rf_cv_model <- train(
-  y_train ~ .,
-  data = X_train,
-  method = "ranger",
-  trControl = cv_control,
-  importance = "impurity"
-)
+# cv_control <- trainControl(method = "cv", number = 10)
+# rf_cv_model <- train(
+#   y_train ~ .,
+#   data = X_train,
+#   method = "ranger",
+#   trControl = cv_control,
+#   importance = "impurity"
+# )
 
 # Importance des variables basée sur la précision (Mean Decrease Accuracy)
-importance_accuracy <- rf_cv_model$finalModel$variable.importance
-print(importance_accuracy)
+# importance_accuracy <- rf_cv_model$finalModel$variable.importance
+# print(importance_accuracy)
 
 
 

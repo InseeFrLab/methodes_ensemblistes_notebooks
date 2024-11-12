@@ -26,7 +26,7 @@ data_sample <- data_census_individuals %>% sample_frac(1/200)
 data_clean <- data_sample %>%
   select(-AGER20, -AGEREV, -AGEREVQ, -ANAI,
          -TRIRIS, -IRIS, -DNAI, -DEPT, -ARM,
-         -CANTVILLE, -NUMMI, -IPONDI) # on supprime les variables avec trop de modalités pour commencer
+         -CANTVILLE, -NUMMI, -IPONDI, -MODV) # on supprime les variables avec trop de modalités pour commencer
   
 
 # Encodage des variables catégorielles
