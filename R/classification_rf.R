@@ -33,6 +33,8 @@ sum(is.na(data_clean$DIPL))
 table(data_clean$DIPL)
 
 table(data_clean$DIPL, data_clean$CS1)
+tableau_croise <- table(data_clean$DIPL, data_clean$CS1)
+prop.table(tableau_croise, margin = 2) * 100
 
 
 # Encodage des variables catégorielles
@@ -53,18 +55,23 @@ y_train <- y[trainIndex]
 X_test  <- X[-trainIndex, ]
 y_test  <- y[-trainIndex]
 
+# Calculer les poids en fonction de l'inverse des fréquences dans y_train
+class_weights <- table(y_train)
+class_weights <- 1 / class_weights
+class_weights <- class_weights / sum(class_weights)  # Normaliser pour que la somme soit égale à 1
+
 # Modèle Random Forest pour classification avec le package ranger
 set.seed(123)  # Pour la reproductibilité
 start_time <- Sys.time() # Démarrer le compteur de temps
 
 rf_model <- ranger(
-  formula = y_train ~ .,   # Classification de la variable DIPL
+  formula = y_train ~ .,
   data = X_train,
-  importance = 'impurity',  # Calcul de l'importance des variables
+  importance = 'impurity',
   num.trees = 500,
-  mtry = floor(sqrt(ncol(X_train))),  # Nombre de variables sélectionnées pour chaque arbre
-  min.node.size = 5,  # Taille minimale des nœuds
-  probability = TRUE,  # Indiquer que nous faisons une classification probabiliste
+  mtry = floor(sqrt(ncol(X_train))),
+  min.node.size = 5,
+  class.weights = class_weights,
   seed = 123
 )
 
@@ -75,13 +82,10 @@ cat("Temps d'exécution du modèle Random Forest :", elapsed_time, "\n") # Affic
 # Prédictions sur les données de test
 predictions <- predict(rf_model, data = X_test)
 
-# Prédictions des classes
-y_pred_class <- predictions$predictions %>% apply(1, which.max) %>% as.factor()
+# Récupérer directement les prédictions de classe
+y_pred_class <- factor(predictions$predictions, levels = levels(y_test))
 
-# Harmoniser les niveaux entre y_test et y_pred_class
-y_pred_class <- factor(y_pred_class, levels = levels(y_test)) # Cas où les données d'entrainement ne contenaient pas tous les niveaux possibles par exemple
-
-# Évaluer la performance avec la matrice de confusion
+# Évaluer la performance avec une matrice de confusion
 conf_matrix <- confusionMatrix(y_pred_class, y_test)
 print(conf_matrix)
 
@@ -95,6 +99,8 @@ ggplot(cm_df, aes(x = Reference, y = Prediction, fill = Freq)) +
        x = "Classe réelle",
        y = "Classe prédite") +
   theme_minimal()
+
+
 
 # Importance des variables (Mean Decrease in Impurity)
 importance_df <- data.frame(
