@@ -2,8 +2,18 @@
 
 ################################################################################
 
+# Charger des packages nécessaires
+library(tidyverse) # Pour la manipulation des données
+library(Rcpp)
+library(ranger) # Pour la Random Forest
+library(plyr)
+library(caret)  # Pour la validation croisée et la gestion des données
+library(readr)
+library(arrow)
+library(ggplot2)
+
 # Charger les données
-data_census_individuals <- read_parquet("data/data_census_individuals.parquet")
+data_census_individuals <- read_parquet_data(local_path = "data/data_census_individuals.parquet")
 
 # Exploration des données
 str(data_census_individuals)  # Voir la structure des données pour comprendre les types de variables
@@ -79,14 +89,14 @@ ggplot(results, aes(x = Age_Real, y = Age_Predicted)) +
   theme_minimal()
 
 # Validation croisée
-cv_control <- trainControl(method = "cv", number = 10)
-rf_cv_model <- train(
-  y_train ~ .,
-  data = X_train,
-  method = "ranger",
-  trControl = cv_control,
-  importance = "impurity"
-)
+# cv_control <- trainControl(method = "cv", number = 10)
+# rf_cv_model <- train(
+#   y_train ~ .,
+#   data = X_train,
+#   method = "ranger",
+#   trControl = cv_control,
+#   importance = "impurity"
+# )
 
 # Importance des variables (Mean Decrease in Impurity)
 
@@ -149,6 +159,7 @@ rf_cv_model <- train(
 # Importance des variables basée sur la précision (Mean Decrease Accuracy)
 importance_accuracy <- rf_cv_model$finalModel$variable.importance
 print(importance_accuracy)
+
 
 
   

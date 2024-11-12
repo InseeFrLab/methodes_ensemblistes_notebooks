@@ -2,6 +2,11 @@
 
 ################################################################################
 
+# Charger des packages nécessaires
+library(aws.s3) # requêtes s3
+library(arrow) # lecture fichiers parquet
+library(httr) # barre de progression téléchargement
+
 # Fonction de téléchargement des données depuis S3 ou une URL avec barre de progression
 download_data <- function(local_path, url = NULL, s3_path = NULL, bucket = NULL, endpoint = NULL) {
   
@@ -97,15 +102,15 @@ read_csv_data <- function(local_path) {
 # Téléchargement des fichiers en local
 
   # Depuis un bucket S3
-  download_data(local_path = "data/data_census_individuals.parquet", 
-                s3_path = "rp/data_census_individuals.parquet", 
-                bucket = "oliviermeslin", 
-                endpoint = "https://minio.lab.sspcloud.fr")
-  
-  download_data(local_path = "data/data_census_dwellings.parquet", 
-                s3_path = "rp/data_census_dwellings.parquet", 
-                bucket = "oliviermeslin", 
-                endpoint = "https://minio.lab.sspcloud.fr")
+  # download_data(local_path = "data/data_census_individuals.parquet", 
+  #               s3_path = "rp/data_census_individuals.parquet", 
+  #               bucket = "oliviermeslin", 
+  #               endpoint = "https://minio.lab.sspcloud.fr")
+  # 
+  # download_data(local_path = "data/data_census_dwellings.parquet", 
+  #               s3_path = "rp/data_census_dwellings.parquet", 
+  #               bucket = "oliviermeslin", 
+  #               endpoint = "https://minio.lab.sspcloud.fr")
   
   # Depuis une adresse URL
   download_data(local_path = "data/data_census_individuals.parquet", 
@@ -130,7 +135,7 @@ doc_census_dwellings <- read_csv_data(local_path = "documentation/doc_census_dwe
 
 
 # Afficher un aperçu des données
-print(head(data_census_individuals))
-print(head(data_census_dwellings))
+# print(head(data_census_individuals))
+# print(head(data_census_dwellings))
 
 
