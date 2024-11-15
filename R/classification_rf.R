@@ -55,10 +55,10 @@ y_train <- y[trainIndex]
 X_test  <- X[-trainIndex, ]
 y_test  <- y[-trainIndex]
 
-# Calculer les poids en fonction de l'inverse des fréquences dans y_train
+# Calculer les poids des observations en fonction de l'inverse des fréquences dans y_train
 class_weights <- table(y_train)
 class_weights <- 1 / class_weights
-class_weights <- class_weights / sum(class_weights)  # Normaliser pour que la somme soit égale à 1
+class_weights <- class_weights / sum(class_weights)  
 
 # Modèle Random Forest pour classification avec le package ranger
 set.seed(123)  # Pour la reproductibilité
