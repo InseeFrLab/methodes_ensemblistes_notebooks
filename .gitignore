@@ -8,4 +8,4 @@ data/
 documentation/
 renv/library
 README.html
-*.ipynb_checkpoints
+*.ipynb_checkpoints/
