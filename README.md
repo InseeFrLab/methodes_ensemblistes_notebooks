@@ -1,7 +1,7 @@
-# Notebook sur document méthodologique sur les méthodes ensemblistes
+# Notebooks accompagnant le document méthodologique sur les méthodes ensemblistes
 
 ## Description
-Ce notebook accompagne le document méthodologique de l'Insee "Les méthodes ensemblistes appliquées à la statistique publique". Il vise à faciliter la prise en main de ces méthodes en les illustrants sur quelques cas d'usages à partir de données publiques en accès libre.
+Ce dépôt rassemble les notebooks accompagnant le document méthodologique de l'Insee "Les méthodes ensemblistes appliquées à la statistique publique". Il vise à faciliter la prise en main de ces méthodes en les illustrants sur quelques cas d'usages à partir de données publiques en accès libre.
 
 ## Gestion des dépendances
 Ce projet utilise `renv` pour gérer les dépendances R et `Conda` pour gérer les dépendances Python.
@@ -30,7 +30,7 @@ Voici la structure principale du projet :
     
   - documentation/           # Documentation et références
  
-  - environment.yml          # Fichier généré par setup.sh. Il inclut les packages Python utiles.
+  - environment.yml          # Fichier généré par setup.sh. Il fige les versions des packages Python nécessaires au projet.
   - renv.lock                # Fichier généré par setup_project.R. Il fige les versions des packages R nécessaires au projet.
   
   - .Rprofile                # Inclut `renv::activate()` pour activer `renv` automatiquement
