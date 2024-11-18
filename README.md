@@ -12,6 +12,11 @@ Voici la structure principale du projet :
 - methodes_ensemblistes_notebooks/
 
   - setup_project_Python.sh    # Script a exécuter au lancement du projet: configure l'environnement Python
+                                 # Pour exécuter ce script:
+                                  # Ouvrir un terminal
+                                  # chmod +x setup_project_Python.sh # Donne les droits d'exécution
+                                  # source setup_project_Python.sh
+                                  
   - setup_project_R.R          # Script a exécuter au lancement du projet: configure l'environnement R
 
   - R/
