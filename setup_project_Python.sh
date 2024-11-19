@@ -32,9 +32,9 @@ else
         echo "❌ Erreur : Échec de la création de l'environnement Conda."
         exit 1
     }
-    
+
     echo "📦 Installation des bibliothèques de base..."
-    conda install -n projet_meth_ens -y numpy pandas matplotlib boto3 requests pyarrow tqdm scikit-learn nbstripout || {
+    conda install -n projet_meth_ens -y numpy pandas matplotlib boto3 requests pyarrow tqdm scikit-learn nbstripout jupyter_contrib_nbextensions jupyter_nbextensions_configurator || {
         echo "❌ Erreur : Échec de l'installation des bibliothèques de base."
         exit 1
     }
@@ -56,6 +56,9 @@ conda activate projet_meth_ens || {
     exit 1
 }
 echo "✅ Environnement 'projet_meth_ens' activé."
+
+# Ajouter exentension de numerotation des titres dans les notebooks
+jupyter contrib nbextension install --user
 
 # Vérifier et figer la version de Conda si nécessaire
 echo "🔍 Vérification de la version de Conda..."
