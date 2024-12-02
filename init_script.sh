@@ -1,10 +1,18 @@
 #!/bin/bash
+set -x
 
-# Cloner le dépôt GitHub dans le répertoire de travail
-git clone https://github.com/InseeFrLab/work/methodes_ensemblistes_notebooks.git
+echo "Début du script"
 
-# Naviguer vers le répertoire contenant le notebook qui nous intéresse
-cd methodes_ensemblistes_notebooks/Python
+# Cloner le dépôt GitHub
+echo "Clonage du dépôt..."
+git clone https://github.com/InseeFrLab/methodes_ensemblistes_notebooks.git || { echo "Échec du clonage"; exit 1; }
 
-# Lancer le service en ouvrant le notebook qui nous intéresse
-jupyter notebook classification_binaire_rf.ipynb
+# Naviguer vers le répertoire du notebook
+echo "Accès au répertoire du notebook..."
+cd methodes_ensemblistes_notebooks/Python || { echo "Échec de l'accès au répertoire"; exit 1; }
+
+# Lancer Jupyter Notebook
+echo "Lancement de Jupyter Notebook..."
+jupyter-notebook --NotebookApp.default_url=/work/methodes_ensemblistes_notebooks/Python/classification_binaire_rf.ipynb || { echo "Échec du lancement de Jupyter"; exit 1; }
+
+echo "Fin du script"
