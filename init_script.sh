@@ -7,4 +7,4 @@ git clone https://github.com/InseeFrLab/methodes_ensemblistes_notebooks.git
 cd methodes_ensemblistes_notebooks/Python
 
 # Lancer le service en ouvrant le notebook qui nous intéresse
-jupyter notebook methodes_ensemblistes_notebooks/Python/classification_binaire_rf.ipynb
+jupyter-notebook --NotebookApp.default_url=/methodes_ensemblistes_notebooks/Python/classification_binaire_rf.ipynb
