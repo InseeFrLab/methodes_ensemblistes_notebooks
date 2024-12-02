@@ -3,6 +3,9 @@
 ## Description
 Ce dépôt rassemble les notebooks accompagnant le document méthodologique de l'Insee "Les méthodes ensemblistes appliquées à la statistique publique". Il vise à faciliter la prise en main de ces méthodes en les illustrants sur quelques cas d'usages à partir de données publiques en accès libre.
 
+[![Lancer avec VSCode](https://img.shields.io/badge/SSPCloud-Lancer%20avec%20VSCode-blue)](https://datalab.sspcloud.fr/launcher/inseefrlab-ide/vscode-python?autoLaunch=true&gitRepos=[{"url":"https://github.com/InseeFrLab/methodes_ensemblistes_notebooks","branch":"main","path":"/"}])
+
+
 ## Gestion des dépendances
 Ce projet utilise `renv` pour gérer les dépendances R et `Conda` pour gérer les dépendances Python.
 
