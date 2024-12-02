@@ -3,7 +3,7 @@
 ## Description
 Ce dépôt rassemble les notebooks accompagnant le document méthodologique de l'Insee "Les méthodes ensemblistes appliquées à la statistique publique". Il vise à faciliter la prise en main de ces méthodes en les illustrants sur quelques cas d'usages à partir de données publiques en accès libre.
 
-[![Lancer avec VSCode](https://img.shields.io/badge/SSPCloud-Lancer%20avec%20VSCode-blue)](https://datalab.sspcloud.fr/launcher/inseefrlab-ide/vscode-python?autoLaunch=true&gitRepos=[{"url":"https://github.com/InseeFrLab/methodes_ensemblistes_notebooks","branch":"main","path":"/"}])
+[![Lancer avec VSCode](https://img.shields.io/badge/SSPCloud-Lancer%20avec%20VSCode-blue)](https://datalab.sspcloud.fr/launcher/ide/jupyter-python?name=RF%20classification&version=2.1.17&git.repository=«https%3A%2F%2Fgithub.com%2FInseeFrLab%2Fmethodes_ensemblistes_notebooks.git»&git.branch=«main»&autoLaunch=true)
 
 
 ## Gestion des dépendances
