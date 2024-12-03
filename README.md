@@ -6,8 +6,7 @@ Ce dépôt rassemble les notebooks accompagnant le document méthodologique de l
 [![Lancer avec Jupyter](https://img.shields.io/badge/SSPCloud-Lancer%20avec%20Jupyter-blue)](https://datalab.sspcloud.fr/launcher/ide/jupyter-python?name=RF%20Classification&version=2.1.17&s3=region-ec97c721&init.personalInit=«https%3A%2F%2Fraw.githubusercontent.com%2FInseeFrLab%2Fmethodes_ensemblistes_notebooks%2Fmain%2Finit_script.sh»&autoLaunch=true)
 
 
-
-[![Lancer avec VSCode](https://img.shields.io/badge/SSPCloud-Lancer%20avec%20VSCode-blue)](https://datalab.sspcloud.fr/launcher/ide/jupyter-python?name=RF%20Classification&version=2.1.17&init.personalInit=«https%3A%2F%2Fgithub.com%2FInseeFrLab%2Fmethodes_ensemblistes_notebooks%2Fblob%2Fmain%2Finit_script.sh»&autoLaunch=true)
+[![Lancer avec VSCode](https://img.shields.io/badge/SSPCloud-Lancer%20avec%20VSCode-blue)](https://datalab.sspcloud.fr/launcher/ide/vscode-python?name=RF%20Classification&version=2.1.18&s3=region-ec97c721&init.personalInit=«https%3A%2F%2Fraw.githubusercontent.com%2FInseeFrLab%2Fmethodes_ensemblistes_notebooks%2Fmain%2Finit_script.sh»&autoLaunch=true)
 
 ## Gestion des dépendances
 Ce projet utilise `renv` pour gérer les dépendances R et `Conda` pour gérer les dépendances Python.
