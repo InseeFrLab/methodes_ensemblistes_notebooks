@@ -1,7 +1,5 @@
 # Notebooks accompagnant le document méthodologique sur les méthodes ensemblistes
 
-<a href="https://datalab.sspcloud.fr/launcher/ide/vscode-python?name=Notebooks_ensemble&version=2.3.20&s3=region-79669f20&resources.limits.cpu=«30000m»&resources.limits.memory=«83Gi»&git.repository=«https%3A%2F%2Fgithub.com%2Finseefrlab%2Fmethodes_ensemblistes_notebooks.git»&autoLaunch=true" target="_blank" rel="noopener" data-original-href="https://datalab.sspcloud.fr/launcher/ide/vscode-python?name=Notebooks_ensemble&version=2.3.20&s3=region-79669f20&resources.limits.cpu=«30000m»&resources.limits.memory=«83Gi»&git.repository=«https%3A%2F%2Fgithub.com%2Finseefrlab%2Fmethodes_ensemblistes_notebooks.git»&autoLaunch=true"><img src="https://custom-icon-badges.demolab.com/badge/SSP%20Cloud-Launch_with_VSCode-blue?logo=vsc&amp;logoColor=white" alt="Onyxia"></a>
-
 ## Description
 Ce dépôt rassemble les notebooks accompagnant le document méthodologique de l'Insee "Les méthodes ensemblistes appliquées à la statistique publique". Il vise à faciliter la prise en main de ces méthodes en les illustrants sur quelques cas d'usages à partir de données publiques en accès libre.
 
